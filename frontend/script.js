@@ -1,0 +1,1 @@
+// Waku integration script placeholder
