@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  margin: 2rem;
+}
+.option {
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  margin: 0.25rem 0;
+}
+pre {
+  background: #f0f0f0;
+  padding: 1rem;
+}
