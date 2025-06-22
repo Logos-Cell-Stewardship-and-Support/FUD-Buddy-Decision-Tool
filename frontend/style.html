@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LunchCell Vote</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { createLightNode, waitForRemotePeer } from "https://unpkg.com/@waku/sdk@0.14.1/browser/index.js";
+
+    let waku;
+
+    async function setupWaku() {
+      waku = await createLightNode({ defaultBootstrap: true });
+      await waku.start();
+      await waitForRemotePeer(waku);
+      console.log("✅ Waku node ready");
+    }
+
+    async function sendVote(vote) {
+      const encoder = await wakuEncoder("/lunchcell/2025-06-21/ethcc/json", "json");
+      const payload = JSON.stringify(vote);
+      await waku.relay.send(encoder, { payload });
+      console.log("📤 Vote sent via Waku");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupWaku();
+
+      document.getElementById("vote-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const form = new FormData(e.target);
+        const user = form.get("user");
+        const options = ["a1", "a2", "a3", "a4"];
+        const scores = {};
+
+        options.forEach((opt) => {
+          scores[`#${opt}`] = [
+            parseInt(form.get(`${opt}_taste`)),
+            parseInt(form.get(`${opt}_dietary`)),
+            parseInt(form.get(`${opt}_cost`)),
+            parseInt(form.get(`${opt}_speed`))
+          ];
+        });
+
+        const vote = {
+          type: "lunch-vote",
+          user,
+          scores,
+          timestamp: new Date().toISOString()
+        };
+
+        document.getElementById("output").textContent = JSON.stringify(vote, null, 2);
+
+        await sendVote(vote);
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>🍱 LunchCell: Vote for Your Lunch</h1>
+
+  <form id="vote-form">
+    <div class="option">
+      <h2>#a1 - Kimchi Burger</h2>
+      Taste: <input type="range" name="a1_taste" min="1" max="5" /><br />
+      Dietary: <input type="range" name="a1_dietary" min="1" max="5" /><br />
+      Cost: <input type="range" name="a1_cost" min="1" max="5" /><br />
+      Speed: <input type="range" name="a1_speed" min="1" max="5" />
+    </div>
+
+    <div class="option">
+      <h2>#a2 - Veggie Banh Mi</h2>
+      Taste: <input type="range" name="a2_taste" min="1" max="5" /><br />
+      Dietary: <input type="range" name="a2_dietary" min="1" max="5" /><br />
+      Cost: <input type="range" name="a2_cost" min="1" max="5" /><br />
+      Speed: <input type="range" name="a2_speed" min="1" max="5" />
+    </div>
+
+    <div class="option">
+      <h2>#a3 - Chicken Shawarma</h2>
+      Taste: <input type="range" name="a3_taste" min="1" max="5" /><br />
+      Dietary: <input type="range" name="a3_dietary" min="1" max="5" /><br />
+      Cost: <input type="range" name="a3_cost" min="1" max="5" /><br />
+      Speed: <input type="range" name="a3_speed" min="1" max="5" />
+    </div>
+
+    <div class="option">
+      <h2>#a4 - Thai Green Curry</h2>
+      Taste: <input type="range" name="a4_taste" min="1" max="5" /><br />
+      Dietary: <input type="range" name="a4_dietary" min="1" max="5" /><br />
+      Cost: <input type="range" name="a4_cost" min="1" max="5" /><br />
+      Speed: <input type="range" name="a4_speed" min="1" max="5" />
+    </div>
+
+    <label for="user">Your name or handle:</label>
+    <input type="text" id="user" name="user" required /><br />
+
+    <button type="submit">Submit Vote</button>
+  </form>
+
+  <pre id="output"></pre>
+</body>
+</html>
