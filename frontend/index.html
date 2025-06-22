@@ -1,1 +1,14 @@
-<!DOCTYPE html><html><head><title>LunchCell</title><link rel='stylesheet' href='style.css'></head><body><main><h1>LunchCell</h1><form id='voteForm'></form><div id='results'></div><script src='script.js'></script></main></body></html>
+const vote = {
+  type: "lunch-vote",
+  from: "@kimia",
+  scores: {
+    "#a1": [3, 5, 4, 4],
+    "#a2": [5, 5, 5, 5]
+  },
+  timestamp: new Date().toISOString()
+};
+
+waku.send({
+  topic: "lunchcell/vote",
+  payload: JSON.stringify(vote)
+});
