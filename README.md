@@ -1,62 +1,48 @@
-LunchCell
-=========
+# Food Cell
 
-**LunchCell** is a micro-governance experiment for collaborative lunch decisions using decentralized voting logic, powered by Codex rules and Waku messaging.
+Food Cell is a prototype demonstrating how the Logos stack can enable
+decentralised lunch planning. Votes are cast on multiple attributes and
+the least polarising option wins. This repo contains a small browser
+front‑end, a simulator for the Nomos procedure and a placeholder for
+Codex logging.
 
----
+## Layout
 
-🍱 **Purpose**
-- Make group lunch decisions that are **least polarizing** and reflect shared satisfaction
-- Combine **local suggestions** (via FUD Buddy agent) with **multi-criteria voting**
-- Run logic locally or on-chain (Nomos-compatible)
+```
+frontend/   HTML, JS and CSS for submitting votes
+simulate/   `lunch_cell.nom` definition and a Python simulator
+backend/    `codex_stub.py` minimal logging stub
+```
 
----
+## Running locally
 
-📦 **Current Stack**
-- `simulate/`: Python logic for Codex/Polity scoring (offline/local)
-- `frontend/`: Mobile-friendly web UI for submitting scores
-- `waku/`: Waku-based messaging for real-time vote exchange
-- `codex/lunchcell.nom`: Governance logic in Codex format (Nomos-compatible)
+Open `frontend/index.html` in a browser to try the voting form. Votes are
+printed to the console. The page can be served from any static server,
+e.g. `python3 -m http.server`.
 
----
+### Simulate the Nomos logic
 
-🗺️ **Roadmap**
+```
+python3 simulate/simulate_nom.py
+```
 
-| Stage | Feature | Status |
-|-------|---------|--------|
-| 0     | Local Polity voting simulation | ✅ Done
-| 1     | Frontend UX w/ mobile sliders | ✅ Done
-| 2     | Real-time pub/sub via Waku | ✅ Done
-| 3     | AI meal recs via FUD Buddy | 🔜 Next
-| 4     | Role-gating via Ordinal or social token | 🔜 Planning
-| 5     | Full Codex + Nomos appchain version | 🧠 R&D
+This loads `simulate/lunch_cell.nom`, generates random votes and prints
+the chosen winner.
 
+## Files
 
----
+- `frontend/script.js` – gathers slider scores and would push them over
+  Waku. FudBuddy integration can hook in here to suggest options.
+- `frontend/waku_listener.js` – stubbed aggregator for incoming votes.
+- `backend/codex_stub.py` – placeholder for Codex logging.
+- `simulate/lunch_cell.nom` – JSON representation of the procedure.
 
-💡 **Governance Logic (Polity)**
-- Options are scored on: `taste`, `dietary`, `cost`, `speed`
-- Winner is the **least polarizing** (highest minimum score) among options with quorum
-- Average score must exceed satisfaction threshold (3.5/5)
-- Includes veto/exit option before execution
+## Logos stack
 
----
+- [Waku](https://waku.org) – p2p messaging
+- [Nomos](https://github.com/status-im/nomos) – on-chain governance
+- [Codex](https://github.com/status-im/codex) – transparent rule engine
 
-🔗 **Waku Topics**
-- `/lunchcell/mock/options`: FUD Buddy sends restaurant choices
-- `/lunchcell/votes`: Users broadcast Polity votes
-- `/lunchcell/result`: System posts winner for display/checkout
+## Credits
 
----
-
-📱 **Mobile UX Goals**
-- One-tap slider inputs for each criteria per restaurant
-- Clear vote submission CTA
-- Auto-scroll to results on submit
-- Optional: live updates as group consensus emerges
-
-
-
----
-
-👨‍🍳 Built by @M0nkeyFl0wer • Inspired by Codex, Nomos, and Waku under the Logos stack
+Prototype by [@M0nkeyFl0wer](https://github.com/M0nkeyFl0wer).

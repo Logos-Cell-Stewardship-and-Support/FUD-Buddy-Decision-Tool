@@ -1,14 +1,33 @@
-const vote = {
-  type: "lunch-vote",
-  from: "@kimia",
-  scores: {
-    "#a1": [3, 5, 4, 4],
-    "#a2": [5, 5, 5, 5]
-  },
-  timestamp: new Date().toISOString()
-};
-
-waku.send({
-  topic: "lunchcell/vote",
-  payload: JSON.stringify(vote)
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Cell</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🍱 Food Cell</h1>
+  <form id="voteForm">
+    <fieldset class="option" data-id="a1">
+      <legend>Kimchi Burger</legend>
+      <label>Taste <input type="range" name="taste_a1" min="1" max="5" value="3"></label>
+      <label>Dietary <input type="range" name="dietary_a1" min="1" max="5" value="3"></label>
+      <label>Cost <input type="range" name="cost_a1" min="1" max="5" value="3"></label>
+      <label>Speed <input type="range" name="speed_a1" min="1" max="5" value="3"></label>
+    </fieldset>
+    <fieldset class="option" data-id="a2">
+      <legend>Veggie Banh Mi</legend>
+      <label>Taste <input type="range" name="taste_a2" min="1" max="5" value="3"></label>
+      <label>Dietary <input type="range" name="dietary_a2" min="1" max="5" value="3"></label>
+      <label>Cost <input type="range" name="cost_a2" min="1" max="5" value="3"></label>
+      <label>Speed <input type="range" name="speed_a2" min="1" max="5" value="3"></label>
+    </fieldset>
+    <label for="user">Name</label>
+    <input id="user" name="user" required>
+    <button type="submit">Vote</button>
+  </form>
+  <pre id="results"></pre>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
