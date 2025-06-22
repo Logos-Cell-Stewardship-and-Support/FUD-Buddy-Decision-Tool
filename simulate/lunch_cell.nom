@@ -1,0 +1,61 @@
+{
+  "id": "lunchcell-v1",
+  "name": "LunchCell Micro-Collective Governance",
+  "description": "A Codex procedure for choosing lunch options via multi-criteria, low-polarization voting.",
+  "version": "0.1.0",
+  "inputs": {
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name"]
+      }
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "user": { "type": "string" },
+          "optionId": { "type": "string" },
+          "taste": { "type": "integer" },
+          "dietary": { "type": "integer" },
+          "cost": { "type": "integer" },
+          "speed": { "type": "integer" }
+        },
+        "required": ["user", "optionId"]
+      }
+    }
+  },
+  "roles": {
+    "voter": {
+      "criteria": "has_ordinal || is_invited"
+    }
+  },
+  "logic": {
+    "scoring": "average_min_satisfaction",
+    "aggregation_rules": {
+      "exclude_outliers": true
+    },
+    "winning_criteria": {
+      "least_polarizing_top_score": true,
+      "min_average_score": 3.5
+    }
+  },
+  "constraints": {
+    "quorum": 3,
+    "veto_window_seconds": 180,
+    "allow_exit_before_execution": true
+  },
+  "effects": {
+    "action": "post_result_to_waku",
+    "payload": {
+      "channel": "/lunchcell/result",
+      "template": "Lunch decision complete: {winner.name}!"
+    }
+  }
+}
