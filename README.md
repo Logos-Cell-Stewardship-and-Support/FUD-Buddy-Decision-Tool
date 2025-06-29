@@ -1,6 +1,6 @@
-# Food Cell
+# Fud Buddy 
 
-Food Cell is a prototype demonstrating how the Logos stack can enable
+Fud buddy is a prototype demonstrating how the Logos stack can enable
 decentralised lunch planning. Votes are cast on multiple attributes and
 the least polarising option wins. This repo contains a small browser
 front‑end, a simulator for the Nomos procedure and a placeholder for
